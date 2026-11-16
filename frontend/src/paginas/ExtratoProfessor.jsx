@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { api } from '../api'
-import { Emails, Tabela } from '../componentes/Listas'
-import { Faixa } from '../componentes/Ui'
+import { Emails, Movimentos } from '../componentes/Listas'
+import { Cabecalho, Carregando, Faixa, Saldo } from '../componentes/Ui'
 import { useSessao } from '../sessao'
-import { quando } from '../util'
+import { moedas, movimentosProfessor } from '../util'
 
 export default function ExtratoProfessor() {
   const { setSaldo } = useSessao()
@@ -26,25 +26,23 @@ export default function ExtratoProfessor() {
     return () => { ativo = false }
   }, [setSaldo])
 
-  if (!extrato && !erro) return <p className="carregando">Carregando.</p>
+  if (!extrato && !erro) return <Carregando />
   if (!extrato) return <Faixa erro={erro} />
+
+  const enviado = extrato.envios.reduce((soma, item) => soma + item.valor, 0)
+  const alunos = new Set(extrato.envios.map((item) => item.alunoNome)).size
 
   return (
     <>
       <Faixa ok={location.state?.mensagem} aviso={extrato.aviso} erro={erro} />
-      <h1>Extrato</h1>
-      <p className="saldo"><span>{extrato.saldoMoedas}</span><small>moedas</small></p>
-      <Tabela
-        colunas={['Data', 'Valor', 'Aluno', 'Motivo']}
+      <Cabecalho titulo="Extrato" />
+      <Saldo valor={extrato.saldoMoedas} compacto />
+      <Movimentos
+        titulo="Envios"
+        resumo={`−${moedas(enviado)} para ${alunos} ${alunos === 1 ? 'aluno' : 'alunos'}`}
+        legenda="Cada bloco é um envio"
         vazio="Nenhum envio."
-        linhas={extrato.envios.map((item) => (
-          <tr key={`${item.dataHora}-${item.alunoNome}`}>
-            <td>{quando(item.dataHora)}</td>
-            <td>{item.valor}</td>
-            <td>{item.alunoNome}</td>
-            <td>{item.motivo}</td>
-          </tr>
-        ))}
+        lista={movimentosProfessor(extrato.envios)}
       />
       <Emails lista={extrato.emails} />
     </>

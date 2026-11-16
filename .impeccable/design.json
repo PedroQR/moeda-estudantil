@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-16T18:30:00Z",
+  "title": "Design System: Moeda estudantil",
+  "extensions": {
+    "colorMeta": {
+      "ultramar": { "role": "primary", "displayName": "Ultramar", "canonical": "#2433b8", "tonalRamp": ["oklch(22% 0.10 269)", "#1a2690", "#2433b8", "oklch(52% 0.17 269)", "oklch(64% 0.12 269)", "oklch(78% 0.07 270)", "#e3e6f7", "oklch(97% 0.01 275)"] },
+      "ultramar-escuro": { "role": "primary", "displayName": "Ultramar Escuro", "canonical": "#1a2690", "tonalRamp": ["oklch(22% 0.10 269)", "#1a2690", "#2433b8", "oklch(52% 0.17 269)", "oklch(64% 0.12 269)", "oklch(78% 0.07 270)", "#e3e6f7", "oklch(97% 0.01 275)"] },
+      "ultramar-claro": { "role": "primary", "displayName": "Ultramar Claro", "canonical": "#e3e6f7", "tonalRamp": ["oklch(22% 0.10 269)", "#1a2690", "#2433b8", "oklch(52% 0.17 269)", "oklch(64% 0.12 269)", "oklch(78% 0.07 270)", "#e3e6f7", "oklch(97% 0.01 275)"] },
+      "amarelo": { "role": "secondary", "displayName": "Amarelo Sinal", "canonical": "#f6c21b", "tonalRamp": ["#4d3c00", "oklch(50% 0.10 89)", "oklch(66% 0.14 88)", "#f6c21b", "#ffd447", "oklch(91% 0.11 92)", "#fdf1c7", "oklch(98% 0.02 95)"] },
+      "amarelo-vivo": { "role": "secondary", "displayName": "Amarelo Vivo", "canonical": "#ffd447", "tonalRamp": ["#4d3c00", "oklch(50% 0.10 89)", "oklch(66% 0.14 88)", "#f6c21b", "#ffd447", "oklch(91% 0.11 92)", "#fdf1c7", "oklch(98% 0.02 95)"] },
+      "amarelo-claro": { "role": "secondary", "displayName": "Amarelo Claro", "canonical": "#fdf1c7", "tonalRamp": ["#4d3c00", "oklch(50% 0.10 89)", "oklch(66% 0.14 88)", "#f6c21b", "#ffd447", "oklch(91% 0.11 92)", "#fdf1c7", "oklch(98% 0.02 95)"] },
+      "amarelo-tinta": { "role": "secondary", "displayName": "Amarelo Tinta", "canonical": "#4d3c00", "tonalRamp": ["#4d3c00", "oklch(50% 0.10 89)", "oklch(66% 0.14 88)", "#f6c21b", "#ffd447", "oklch(91% 0.11 92)", "#fdf1c7", "oklch(98% 0.02 95)"] },
+      "vermelho": { "role": "tertiary", "displayName": "Vermelho Alerta", "canonical": "#d23a26", "tonalRamp": ["oklch(30% 0.10 31)", "oklch(40% 0.14 31)", "#b02b18", "#d23a26", "oklch(68% 0.14 31)", "oklch(80% 0.08 32)", "#fbe3de", "oklch(98% 0.01 32)"] },
+      "vermelho-texto": { "role": "tertiary", "displayName": "Vermelho Texto", "canonical": "#b02b18", "tonalRamp": ["oklch(30% 0.10 31)", "oklch(40% 0.14 31)", "#b02b18", "#d23a26", "oklch(68% 0.14 31)", "oklch(80% 0.08 32)", "#fbe3de", "oklch(98% 0.01 32)"] },
+      "vermelho-claro": { "role": "tertiary", "displayName": "Vermelho Claro", "canonical": "#fbe3de", "tonalRamp": ["oklch(30% 0.10 31)", "oklch(40% 0.14 31)", "#b02b18", "#d23a26", "oklch(68% 0.14 31)", "oklch(80% 0.08 32)", "#fbe3de", "oklch(98% 0.01 32)"] },
+      "tinta": { "role": "neutral", "displayName": "Tinta", "canonical": "#121212", "tonalRamp": ["#121212", "#5a5a53", "#a3a39b", "#d9d9d2", "#ebebe6", "#f5f5f2", "#ffffff"] },
+      "n0": { "role": "neutral", "displayName": "Branco", "canonical": "#ffffff", "tonalRamp": ["#121212", "#5a5a53", "#a3a39b", "#d9d9d2", "#ebebe6", "#f5f5f2", "#ffffff"] },
+      "n50": { "role": "neutral", "displayName": "Papel", "canonical": "#f5f5f2", "tonalRamp": ["#121212", "#5a5a53", "#a3a39b", "#d9d9d2", "#ebebe6", "#f5f5f2", "#ffffff"] },
+      "n100": { "role": "neutral", "displayName": "Papel Sombra", "canonical": "#ebebe6", "tonalRamp": ["#121212", "#5a5a53", "#a3a39b", "#d9d9d2", "#ebebe6", "#f5f5f2", "#ffffff"] },
+      "n200": { "role": "neutral", "displayName": "Fio", "canonical": "#d9d9d2", "tonalRamp": ["#121212", "#5a5a53", "#a3a39b", "#d9d9d2", "#ebebe6", "#f5f5f2", "#ffffff"] },
+      "n400": { "role": "neutral", "displayName": "Cinza Médio", "canonical": "#a3a39b", "tonalRamp": ["#121212", "#5a5a53", "#a3a39b", "#d9d9d2", "#ebebe6", "#f5f5f2", "#ffffff"] },
+      "n600": { "role": "neutral", "displayName": "Cinza Texto", "canonical": "#5a5a53", "tonalRamp": ["#121212", "#5a5a53", "#a3a39b", "#d9d9d2", "#ebebe6", "#f5f5f2", "#ffffff"] }
+    },
+    "typographyMeta": {
+      "saldo": { "displayName": "Saldo", "purpose": "Número do saldo no campo amarelo; font-size clamp(4rem, 8.5vw, 7.5rem), font-stretch 125%. Compacto: clamp(2.75rem, 5vw, 4rem)." },
+      "display": { "displayName": "Display", "purpose": "Só o título da abertura para visitantes; font-size clamp(3rem, 7.5vw, 6rem), font-stretch 122%." },
+      "headline": { "displayName": "Headline", "purpose": "Título de cada página; font-size clamp(2rem, 3.4vw, 2.75rem), font-stretch 112%." },
+      "title": { "displayName": "Title", "purpose": "Títulos de seção; font-stretch 108%." },
+      "numeral": { "displayName": "Numeral", "purpose": "Números dos fatos, rótulos da régua e valores de tabela; font-stretch 112%." },
+      "body-lead": { "displayName": "Body Lead", "purpose": "Lead da abertura; font-size clamp(1.125rem, 1.6vw, 1.375rem), até 40ch." },
+      "body": { "displayName": "Body", "purpose": "Texto corrido com tabular-nums global." },
+      "label": { "displayName": "Label", "purpose": "Rótulos de campo de formulário." },
+      "table-head": { "displayName": "Table Head", "purpose": "Só cabeçalhos de coluna de tabela, em maiúsculas, cor n600." },
+      "cupom": { "displayName": "Cupom", "purpose": "Só o código do cupom (var(--mono))." }
+    },
+    "shadows": [
+      { "name": "contorno-inset", "value": "inset 0 0 0 2px var(--tinta)", "purpose": "Contorno de botões sem fundo (secundário; claro com var(--n0); perigo com currentColor; desabilitado na vitrine com var(--n200)). Não é elevação." }
+    ],
+    "motion": [
+      { "name": "saida", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Única curva do sistema (--saida), ease-out exponencial, usada em toda transição." },
+      { "name": "cor-rapida", "value": "140ms var(--saida)", "purpose": "Cor de blocos da régua, células de tabela e borda de campo." },
+      { "name": "cor", "value": "160ms var(--saida)", "purpose": "Cor de botões, links de navegação e contas de demonstração." },
+      { "name": "seta-email", "value": "180ms var(--saida)", "purpose": "Rotação da seta ao abrir um e-mail." },
+      { "name": "filtro-foto", "value": "200ms var(--saida)", "purpose": "Filtro da foto de vantagem fora do alcance do saldo." },
+      { "name": "crescer", "value": "1100ms var(--saida) both", "purpose": "A régua cresce da esquerda uma vez ao carregar (clip-path inset 0 65% 0 0 até 0)." },
+      { "name": "vaivem", "value": "900ms linear infinite", "purpose": "Barra ultramar/amarela do estado Carregando." },
+      { "name": "reduced-motion", "value": "@media (prefers-reduced-motion: reduce) { animation: none; transition: none }", "purpose": "Desliga todas as animações e transições." }
+    ],
+    "breakpoints": [
+      { "name": "trilho-vira-topo", "value": "960px" },
+      { "name": "mobile", "value": "640px" },
+      { "name": "bloco-sem-rotulo (container)", "value": "4.5rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão primário",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal sobre o papel: retângulo ultramar com texto branco.",
+      "html": "<button class=\"ds-botao\">Enviar moedas</button>",
+      "css": ".ds-botao { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: 0 1.35rem; background: var(--ultramar); color: var(--n0); border: 0; border-radius: 0; font-family: \"Archivo Variable\", \"Segoe UI\", sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background-color 160ms var(--saida), color 160ms var(--saida), box-shadow 160ms var(--saida); } .ds-botao:hover { background: var(--ultramar-escuro); } .ds-botao:active { transform: translateY(1px); } .ds-botao:focus-visible { outline: 3px solid var(--ultramar); outline-offset: 2px; } .ds-botao:disabled { background: var(--n100); color: var(--n600); cursor: not-allowed; transform: none; }"
+    },
+    {
+      "name": "Botão secundário",
+      "kind": "button",
+      "refersTo": "button-secundario",
+      "description": "Ação alternativa: contorno inset de 2px tinta que inverte no hover.",
+      "html": "<button class=\"ds-botao-secundario\">Cadastrar aluno</button>",
+      "css": ".ds-botao-secundario { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: 0 1.35rem; background: transparent; color: var(--tinta); box-shadow: inset 0 0 0 2px var(--tinta); border: 0; border-radius: 0; font-family: \"Archivo Variable\", \"Segoe UI\", sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background-color 160ms var(--saida), color 160ms var(--saida); } .ds-botao-secundario:hover { background: var(--tinta); color: var(--n0); } .ds-botao-secundario:active { transform: translateY(1px); } .ds-botao-secundario:focus-visible { outline: 3px solid var(--ultramar); outline-offset: 2px; }"
+    },
+    {
+      "name": "Botão perigo",
+      "kind": "button",
+      "refersTo": "button-perigo",
+      "description": "Ação destrutiva isolada: contorno e texto vermelho, fundo vermelho no hover.",
+      "html": "<button class=\"ds-botao-perigo\">Excluir meu cadastro</button>",
+      "css": ".ds-botao-perigo { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: 0 1.35rem; background: transparent; color: var(--vermelho-texto); box-shadow: inset 0 0 0 2px currentColor; border: 0; border-radius: 0; font-family: \"Archivo Variable\", \"Segoe UI\", sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background-color 160ms var(--saida), color 160ms var(--saida), box-shadow 160ms var(--saida); } .ds-botao-perigo:hover { background: var(--vermelho); color: var(--n0); box-shadow: inset 0 0 0 2px var(--vermelho); } .ds-botao-perigo:focus-visible { outline: 3px solid var(--ultramar); outline-offset: 2px; }"
+    },
+    {
+      "name": "Saldo",
+      "kind": "custom",
+      "refersTo": "saldo",
+      "description": "Campo amarelo de largura total com o saldo em números largos e o campo tinta com as ações.",
+      "html": "<section class=\"ds-saldo\"><div class=\"ds-saldo-numero\"><p class=\"ds-saldo-rotulo\">Saldo disponível</p><p class=\"ds-saldo-valor\"><span>50</span><small>moedas</small></p></div><div class=\"ds-saldo-acoes\"><a class=\"ds-saldo-amarelo\" href=\"#\">Resgatar vantagem</a><a class=\"ds-saldo-claro\" href=\"#\">Ver extrato</a></div></section>",
+      "css": ".ds-saldo { display: grid; grid-template-columns: minmax(0, 1fr) auto; background: var(--amarelo); color: var(--tinta); font-family: \"Archivo Variable\", \"Segoe UI\", sans-serif; } .ds-saldo p { margin: 0; } .ds-saldo-numero { padding: 1.75rem 2.25rem 2rem; min-width: 0; } .ds-saldo-rotulo { font-size: 1.0625rem; font-weight: 700; } .ds-saldo-valor { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.25rem 0.9rem; margin-top: 0.75rem; } .ds-saldo-valor span { font-size: clamp(4rem, 8.5vw, 7.5rem); font-weight: 900; font-stretch: 125%; line-height: 0.85; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; } .ds-saldo-valor small { font-size: 1.5rem; font-weight: 700; } .ds-saldo-acoes { display: flex; flex-direction: column; justify-content: center; gap: 0.75rem; background: var(--tinta); padding: 2rem; min-width: 17.5rem; } .ds-saldo-amarelo, .ds-saldo-claro { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: 0 1.35rem; font-weight: 700; text-decoration: none; transition: background-color 160ms var(--saida), color 160ms var(--saida); } .ds-saldo-amarelo { background: var(--amarelo); color: var(--tinta); } .ds-saldo-amarelo:hover { background: var(--amarelo-vivo); } .ds-saldo-claro { color: var(--n0); box-shadow: inset 0 0 0 2px var(--n0); } .ds-saldo-claro:hover { background: var(--n0); color: var(--tinta); } .ds-saldo-acoes a:focus-visible { outline: 3px solid var(--amarelo); outline-offset: 2px; }"
+    },
+    {
+      "name": "Régua de movimentos",
+      "kind": "custom",
+      "refersTo": "regua-bloco-entrada",
+      "description": "Assinatura: blocos com largura proporcional ao valor, entrada ultramar e saída tinta, amarelo quando ativo.",
+      "html": "<div class=\"ds-regua\"><button class=\"ds-bloco ds-entrada\" style=\"flex-grow:200\"><span>+200</span></button><button class=\"ds-bloco ds-saida\" style=\"flex-grow:150\"><span>−150</span></button><button class=\"ds-bloco ds-entrada\" style=\"flex-grow:40\"><span>+40</span></button></div>",
+      "css": ".ds-regua { display: flex; gap: 3px; height: 4.25rem; animation: ds-crescer 1100ms var(--saida) both; } @keyframes ds-crescer { from { clip-path: inset(0 65% 0 0); } to { clip-path: inset(0 0 0 0); } } .ds-bloco { flex-basis: 0; min-width: 0.6rem; border: 0; border-radius: 0; padding: 0 0.75rem; display: flex; align-items: center; font-family: \"Archivo Variable\", \"Segoe UI\", sans-serif; color: var(--n0); cursor: pointer; transition: background-color 140ms var(--saida), color 140ms var(--saida); } .ds-bloco span { font-size: 1.125rem; font-weight: 850; font-stretch: 112%; white-space: nowrap; } .ds-entrada { background: var(--ultramar); } .ds-saida { background: var(--tinta); } .ds-bloco:hover, .ds-bloco:focus-visible { background: var(--amarelo); color: var(--tinta); } .ds-bloco:focus-visible { outline: 3px solid var(--ultramar); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-regua { animation: none; } .ds-bloco { transition: none; } }"
+    },
+    {
+      "name": "Campo de formulário",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Rótulo 700 acima de um campo branco de canto reto com borda n400 e foco ultramar.",
+      "html": "<div class=\"ds-campo\"><label for=\"ds-email\">E-mail</label><input id=\"ds-email\" type=\"email\" placeholder=\"nome@pucminas.br\"></div>",
+      "css": ".ds-campo { display: flex; flex-direction: column; gap: 0.4rem; font-family: \"Archivo Variable\", \"Segoe UI\", sans-serif; color: var(--tinta); } .ds-campo label { font-weight: 700; font-size: 0.9375rem; } .ds-campo input { font: inherit; color: inherit; background: var(--n0); border: 1.5px solid var(--n400); border-radius: 0; min-height: 3rem; padding: 0.6rem 0.8rem; width: 100%; transition: border-color 140ms var(--saida); } .ds-campo input:hover { border-color: var(--n600); } .ds-campo input:focus-visible { border-color: var(--ultramar); outline: 2px solid var(--ultramar); outline-offset: 0; } .ds-campo input::placeholder { color: var(--n600); }"
+    },
+    {
+      "name": "Navegação do trilho",
+      "kind": "nav",
+      "refersTo": "trilho",
+      "description": "Trilho ultramar com links brancos em bloco; ativo em amarelo com texto tinta.",
+      "html": "<nav class=\"ds-trilho\"><a class=\"ds-ativo\" href=\"#\">Meu balcão</a><a href=\"#\">Vantagens</a><a href=\"#\">Extrato</a><a href=\"#\">Meus dados</a></nav>",
+      "css": ".ds-trilho { display: flex; flex-direction: column; width: 15.5rem; background: var(--ultramar); padding: 1rem 0; font-family: \"Archivo Variable\", \"Segoe UI\", sans-serif; } .ds-trilho a { display: block; padding: 0.85rem 1.5rem; color: var(--n0); font-weight: 600; text-decoration: none; transition: background-color 160ms var(--saida); } .ds-trilho a:hover { background: rgb(255 255 255 / 0.1); } .ds-trilho a.ds-ativo { background: var(--amarelo); color: var(--tinta); } .ds-trilho a:focus-visible { outline: 3px solid var(--amarelo); outline-offset: -3px; }"
+    },
+    {
+      "name": "Selos de situação",
+      "kind": "chip",
+      "refersTo": "selo-ok",
+      "description": "Situação do e-mail: enviado, pendente e falha em pares claro/escuro da mesma família.",
+      "html": "<span class=\"ds-selo ds-ok\">Enviado</span> <span class=\"ds-selo ds-espera\">Pendente</span> <span class=\"ds-selo ds-falha\">Falha</span> <span class=\"ds-cupom\">3783JDNV</span>",
+      "css": ".ds-selo { display: inline-block; font-family: \"Archivo Variable\", \"Segoe UI\", sans-serif; font-size: 0.8125rem; font-weight: 700; padding: 0.25rem 0.6rem; white-space: nowrap; background: var(--n100); color: var(--n600); } .ds-ok { background: var(--ultramar-claro); color: var(--ultramar-escuro); } .ds-espera { background: var(--amarelo-claro); color: var(--amarelo-tinta); } .ds-falha { background: var(--vermelho-claro); color: var(--vermelho-texto); } .ds-cupom { display: inline-block; font-family: \"JetBrains Mono\", ui-monospace, monospace; font-weight: 700; font-size: 0.875rem; letter-spacing: 0.04em; background: var(--n100); color: var(--tinta); padding: 0.15rem 0.5rem; }"
+    },
+    {
+      "name": "Faixas de aviso",
+      "kind": "custom",
+      "refersTo": "faixa",
+      "description": "Confirmação em ultramar-claro com marcador quadrado; erro em vermelho-claro com marcador circular.",
+      "html": "<p class=\"ds-faixa\">Moedas enviadas.</p><p class=\"ds-faixa ds-erro\" role=\"alert\">Saldo insuficiente.</p>",
+      "css": ".ds-faixa { display: flex; align-items: baseline; gap: 0.75rem; margin: 0 0 0.5rem; padding: 0.9rem 1.1rem; background: var(--ultramar-claro); color: var(--ultramar-escuro); font-family: \"Archivo Variable\", \"Segoe UI\", sans-serif; font-weight: 600; } .ds-faixa::before { content: \"\"; flex: none; width: 0.65rem; height: 0.65rem; background: var(--ultramar); transform: translateY(0.05rem); } .ds-faixa.ds-erro { background: var(--vermelho-claro); color: var(--vermelho-texto); } .ds-faixa.ds-erro::before { background: var(--vermelho); border-radius: 50%; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "O Saldo como Sinal Público",
+    "overview": "O Moeda fala o idioma dos programas de identidade visual brasileiros dos anos 60 e 70: campos de cor chapada, grade rígida, cantos retos e uma marca modular de quatro quartos (dois quadrados brancos e dois quartos de círculo amarelos) que se repete no favicon, no trilho, na abertura e no lugar de fotos ausentes. O saldo não é um número dentro de um cartão; é um campo amarelo de largura total, com algarismos largos e pesados, lido de longe num projetor. Cada perfil abre no \"Meu balcão\" e encontra o saldo e a próxima ação sem procurar.\n\nA densidade é de ferramenta, não de vitrine: tabelas com fio preto no topo, rótulos curtos, formulários em duas colunas com limite de 46rem. A cor faz o trabalho que sombras e bordas arredondadas fariam num painel comum: ultramar é a moldura (trilho, cabeçalho de visitante, entradas de moedas), amarelo é valor e seleção, tinta é saída e contraste, vermelho é só erro e perigo. A profundidade vem do contraste entre campos, nunca de elevação.\n\nA rejeição confirmada da direção é o painel SaaS de cartões brancos com acento azul: nada de cartões flutuando sobre cinza, nada de sombra, nada de raio.",
+    "keyCharacteristics": [
+      "Campos de cor chapada encostados uns nos outros, sem sombra e sem raio.",
+      "Trilho ultramar fixo à esquerda (15.5rem) nas telas logadas; barra ultramar no topo para visitantes.",
+      "Amarelo reservado a saldo, valor e seleção.",
+      "Archivo variável com eixo de largura: números e títulos largos (108–125%) e pesados (800–900); texto corrido normal.",
+      "Régua de movimentos como assinatura: blocos proporcionais ao valor, ligados à tabela por hover e foco.",
+      "Quarto de círculo da marca como única curva de forma do sistema."
+    ],
+    "rules": [
+      { "name": "The Amarelo Reservado Rule", "body": "Amarelo marca saldo, valor e seleção (item ativo, foco sobre campo escuro, seleção de texto) e a ação principal sobre campo preto. Fora disso, aparece só como cor da marca: os quartos de círculo do sinal, o passo \"Aluno\" do ciclo e a barra de carregando.", "section": "colors" },
+      { "name": "The Vermelho Só Para Erro Rule", "body": "Vermelho aparece apenas em erro e em ação destrutiva (faixa de erro, botão de perigo, ajuda com erro, selo de falha, valor que excede o saldo). Nunca como acento decorativo.", "section": "colors" },
+      { "name": "The Rampa Única Rule", "body": "Neutros vêm só de `n0`, `n50`, `n100`, `n200`, `n400`, `n600` e `tinta`. Sobre campo de cor, use branco ou tinta translúcidos, não um cinza novo.", "section": "colors" },
+      { "name": "The Largura É Volume Rule", "body": "Importância sobe pela largura e pelo peso, não por cor: números e títulos vão de 108% a 125% de largura e de 800 a 900 de peso; texto corrido fica em 100% e 400. Quanto mais público o número, mais largo (o saldo é 125%).", "section": "typography" },
+      { "name": "The Mono Só no Cupom Rule", "body": "JetBrains Mono (`--mono`) é exclusiva do código do cupom. Nenhum outro texto usa mono.", "section": "typography" },
+      { "name": "The Cor Chapada Rule", "body": "Nenhuma superfície flutua. Uma área se destaca por mudar de cor de campo ou ganhar um fio, nunca por sombra.", "section": "elevation" },
+      { "name": "The Canto Reto Rule", "body": "Raio é 0. As únicas curvas são o quarto de círculo vindo da marca e o pequeno marcador circular da faixa de erro; nunca arredondamento de canto de componente.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do colocar o saldo de cada perfil no campo amarelo de largura total logo abaixo do cabeçalho, com as ações no campo tinta à direita.",
+      "Do usar só os tokens de `estilos.css` (`--ultramar`, `--amarelo`, `--tinta`, `--vermelho` e família, rampa `--n0` a `--n600`); sobre campos coloridos, usar branco ou tinta translúcidos.",
+      "Do dar a números públicos (saldo, preço, totais, valores da régua) peso 800–900 e largura de 112% a 125% via `font-stretch`.",
+      "Do separar estrutura com fios: 2px `--tinta` no topo de tabelas e listas, 1px `--n200` entre linhas.",
+      "Do manter cantos retos e o contorno de botões sem fundo como `box-shadow` inset de 2px.",
+      "Do usar `--saida` em toda transição e manter o bloco `prefers-reduced-motion` que desliga tudo.",
+      "Do manter o foco visível: anel de 3px ultramar, trocado por amarelo sobre ultramar e tinta.",
+      "Do ligar cada bloco da régua à sua linha de tabela por hover e foco, com o amarelo como cor de seleção."
+    ],
+    "donts": [
+      "Don't construir o painel SaaS de cartões brancos com acento azul: nada de cartões elevados sobre fundo cinza.",
+      "Don't usar `box-shadow` para elevação nem arredondar cantos de componentes; a curva de forma é o quarto de círculo da marca.",
+      "Don't usar amarelo como fundo de conteúdo genérico (seções, listas, cabeçalhos) que não seja saldo, valor ou seleção.",
+      "Don't usar vermelho fora de erro e ação destrutiva.",
+      "Don't usar JetBrains Mono fora do código do cupom.",
+      "Don't criar cinzas ou tons de azul fora da rampa de tokens."
+    ]
+  }
+}

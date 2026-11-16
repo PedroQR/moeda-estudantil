@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../api'
-import { Faixa, Foto } from '../componentes/Ui'
+import { Cabecalho, Carregando, Faixa, Foto, Saldo } from '../componentes/Ui'
 import { useSessao } from '../sessao'
-import { fotoSegura } from '../util'
+import { fotoSegura, moedas } from '../util'
 
 export default function Vantagens() {
   const { setSaldo } = useSessao()
@@ -35,33 +35,42 @@ export default function Vantagens() {
     }
   }
 
-  if (!dados && !erro) return <p className="carregando">Carregando.</p>
+  if (!dados && !erro) return <Carregando />
+
+  const alcancaveis = dados ? dados.vantagens.filter((item) => dados.saldoMoedas >= item.custoEmMoedas).length : 0
 
   return (
     <>
       <Faixa erro={erro} />
-      <h1>Vantagens</h1>
-      {dados ? <p className="saldo"><span>{dados.saldoMoedas}</span><small>moedas</small></p> : null}
-      {dados && dados.vantagens.length === 0 ? <p>Nenhuma vantagem cadastrada ainda.</p> : null}
-      <div className="catalogo">
-        {dados ? dados.vantagens.map((vantagem) => {
-          const pode = dados.saldoMoedas >= vantagem.custoEmMoedas
-          return (
-            <article className="prato" key={vantagem.id}>
-              <Foto url={fotoSegura(vantagem.fotoUrl)} alt="Foto da vantagem" />
-              <div>
-                <h2>{vantagem.descricao}</h2>
-                <p>{vantagem.empresaNome}</p>
-                {!pode ? <p>Saldo insuficiente para esta vantagem.</p> : null}
-              </div>
-              <div className="preco-acao">
-                <p className="preco">{vantagem.custoEmMoedas} moedas</p>
+      <Cabecalho titulo="Vantagens">
+        {dados && dados.vantagens.length > 0 ? (
+          <p>{alcancaveis} de {dados.vantagens.length} ao alcance do seu saldo.</p>
+        ) : null}
+      </Cabecalho>
+      {dados ? <Saldo valor={dados.saldoMoedas} compacto /> : null}
+      {dados && dados.vantagens.length === 0 ? <p className="vazio-bloco">Nenhuma vantagem cadastrada ainda.</p> : null}
+      {dados && dados.vantagens.length > 0 ? (
+        <ul className="vitrine">
+          {dados.vantagens.map((vantagem) => {
+            const falta = vantagem.custoEmMoedas - dados.saldoMoedas
+            const pode = falta <= 0
+            return (
+              <li className={pode ? 'peca' : 'peca fora'} key={vantagem.id}>
+                <Foto url={fotoSegura(vantagem.fotoUrl)} alt="Foto da vantagem" />
+                <div className="peca-corpo">
+                  <p className="peca-empresa">{vantagem.empresaNome}</p>
+                  <h2>{vantagem.descricao}</h2>
+                </div>
+                <p className="peca-preco">
+                  <span><strong>{moedas(vantagem.custoEmMoedas)}</strong> moedas</span>
+                  {pode ? null : <span className="peca-falta">Faltam {moedas(falta)}</span>}
+                </p>
                 <button className="botao" type="button" disabled={!pode} onClick={() => resgatar(vantagem.id)}>Resgatar</button>
-              </div>
-            </article>
-          )
-        }) : null}
-      </div>
+              </li>
+            )
+          })}
+        </ul>
+      ) : null}
     </>
   )
 }

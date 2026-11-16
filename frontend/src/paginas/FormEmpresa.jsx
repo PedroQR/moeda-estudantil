@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { api } from '../api'
-import { Campo, Faixa } from '../componentes/Ui'
+import { Cabecalho, Campo, Carregando, Faixa } from '../componentes/Ui'
 import { useSessao } from '../sessao'
 
 const VAZIO = { nome: '', email: '', senha: '', cnpj: '' }
@@ -56,29 +56,36 @@ export default function FormEmpresa({ editando = false }) {
     }
   }
 
-  if (!pronto && !erro) return <p className="carregando">Carregando.</p>
+  if (!pronto && !erro) return <Carregando />
 
   return (
     <div className="pagina-form">
       <Faixa erro={erro} />
-      <h1>{editando ? 'Meus dados' : 'Cadastrar empresa'}</h1>
-      <form onSubmit={enviar}>
-        <Campo id="nome" rotulo="Nome" valor={valores.nome} aoMudar={mudar('nome')} obrigatorio autoComplete="organization" />
-        <Campo id="email" rotulo="E-mail" tipo="email" valor={valores.email} aoMudar={mudar('email')} obrigatorio autoComplete="email" />
-        <Campo
-          id="senha"
-          rotulo="Senha"
-          tipo="password"
-          valor={valores.senha}
-          aoMudar={mudar('senha')}
-          obrigatorio={!editando}
-          autoComplete="new-password"
-          placeholder={editando ? 'Deixe em branco para manter' : undefined}
-        />
-        <Campo id="cnpj" rotulo="CNPJ" valor={valores.cnpj} aoMudar={mudar('cnpj')} />
-        {editando ? null : <p className="prosa">Depois de entrar, cadastre as vantagens com descrição, foto e custo em moedas.</p>}
+      <Cabecalho titulo={editando ? 'Meus dados' : 'Cadastrar empresa'}>
+        {editando ? null : <p>Depois de entrar, cadastre as vantagens com descrição, foto e custo em moedas.</p>}
+      </Cabecalho>
+      <form className="formulario" onSubmit={enviar}>
+        <fieldset>
+          <legend>Empresa</legend>
+          <Campo id="nome" rotulo="Nome" valor={valores.nome} aoMudar={mudar('nome')} obrigatorio autoComplete="organization" />
+          <Campo id="cnpj" rotulo="CNPJ" valor={valores.cnpj} aoMudar={mudar('cnpj')} />
+        </fieldset>
+        <fieldset>
+          <legend>Acesso</legend>
+          <Campo id="email" rotulo="E-mail" tipo="email" valor={valores.email} aoMudar={mudar('email')} obrigatorio autoComplete="email" />
+          <Campo
+            id="senha"
+            rotulo="Senha"
+            tipo="password"
+            valor={valores.senha}
+            aoMudar={mudar('senha')}
+            obrigatorio={!editando}
+            autoComplete="new-password"
+            placeholder={editando ? 'Deixe em branco para manter' : undefined}
+          />
+        </fieldset>
         <div className="acoes">
-          <button className="botao" type="submit" disabled={enviando}>Salvar</button>
+          <button className="botao" type="submit" disabled={enviando}>{enviando ? 'Salvando…' : 'Salvar'}</button>
           <Link className="botao secundario" to={editando ? '/empresa' : '/'}>Cancelar</Link>
         </div>
       </form>

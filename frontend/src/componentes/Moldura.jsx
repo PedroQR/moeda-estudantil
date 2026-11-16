@@ -1,12 +1,14 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useSessao } from '../sessao'
-import { destino, rotuloPapel } from '../util'
+import { destino, moedas, rotuloPapel } from '../util'
+import { Carregando, Marca } from './Ui'
 
 const LINKS = {
   ALUNO: [
     ['/aluno', 'Meu balcão', true],
-    ['/aluno/extrato', 'Extrato', false],
     ['/aluno/vantagens', 'Vantagens', false],
+    ['/aluno/extrato', 'Extrato', false],
+    ['/aluno/editar', 'Meus dados', false],
   ],
   PROFESSOR: [
     ['/professor', 'Meu balcão', true],
@@ -20,45 +22,74 @@ const LINKS = {
   ],
 }
 
+function ativo({ isActive }) {
+  return isActive ? 'ativo' : undefined
+}
+
 export default function Moldura() {
-  const { sessao, sair } = useSessao()
+  const { sessao, saldo, sair } = useSessao()
   const navigate = useNavigate()
-  const home = sessao ? destino(sessao.papel) : '/'
 
   async function encerrar() {
     const mensagem = await sair()
     navigate('/entrar', { state: { mensagem } })
   }
 
+  const pular = <a className="pular" href="#conteudo">Ir para o conteúdo</a>
+
+  if (sessao) {
+    return (
+      <>
+        {pular}
+        <div className="app">
+          <aside className="trilho">
+            <NavLink className="marca" to={destino(sessao.papel)} aria-label="Moeda, início">
+              <Marca />
+              <span>moeda</span>
+            </NavLink>
+            <nav className="trilho-nav" aria-label="Seções">
+              {LINKS[sessao.papel].map(([to, rotulo, fim]) => (
+                <NavLink key={to} to={to} end={fim} className={ativo}>{rotulo}</NavLink>
+              ))}
+            </nav>
+            <div className="trilho-pe">
+              <p className="quem">
+                <strong>{sessao.nome}</strong>
+                <span>{rotuloPapel(sessao.papel)}</span>
+              </p>
+              {saldo != null && sessao.papel !== 'EMPRESA' ? (
+                <p className="trilho-saldo"><span>{moedas(saldo)}</span> moedas</p>
+              ) : null}
+              <button className="sair" type="button" onClick={encerrar}>Sair</button>
+            </div>
+          </aside>
+          <main className="miolo" id="conteudo">
+            <Outlet />
+          </main>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
-      <a className="pular" href="#conteudo">Ir para o conteúdo</a>
+      {pular}
       <header className="topo">
-        <NavLink className="marca" to={home}>Moeda</NavLink>
-        {sessao ? <p className="identidade">{sessao.nome}, {rotuloPapel(sessao.papel)}</p> : <span className="identidade" />}
-        {!sessao && sessao !== undefined ? (
-          <nav className="topo-links" aria-label="Acesso">
-            <NavLink to="/entrar">Entrar</NavLink>
-            <NavLink to="/cadastro/aluno">Cadastrar aluno</NavLink>
-            <NavLink to="/cadastro/empresa">Cadastrar empresa</NavLink>
+        <NavLink className="marca" to="/" aria-label="Moeda, início">
+          <Marca />
+          <span>moeda</span>
+        </NavLink>
+        {sessao === null ? (
+          <nav className="topo-nav" aria-label="Acesso">
+            <NavLink to="/entrar" className={ativo}>Entrar</NavLink>
+            <NavLink to="/cadastro/aluno" className={ativo}>Cadastrar aluno</NavLink>
+            <NavLink to="/cadastro/empresa" className={ativo}>Cadastrar empresa</NavLink>
           </nav>
         ) : null}
       </header>
-      <div className={sessao ? 'corpo com-menu' : 'corpo'}>
-        {sessao ? (
-          <nav className="menu" aria-label="Seções">
-            {LINKS[sessao.papel].map(([to, rotulo, fim]) => (
-              <NavLink key={to} to={to} end={fim} className={({ isActive }) => (isActive ? 'ativo' : undefined)}>
-                {rotulo}
-              </NavLink>
-            ))}
-            <button className="sair" type="button" onClick={encerrar}>Sair</button>
-          </nav>
-        ) : null}
-        <main className="miolo" id="conteudo">
-          {sessao === undefined ? <p className="carregando">Carregando.</p> : <Outlet />}
-        </main>
-      </div>
+      <main className="miolo visitante" id="conteudo">
+        {sessao === undefined ? <Carregando /> : <Outlet />}
+      </main>
     </>
   )
 }

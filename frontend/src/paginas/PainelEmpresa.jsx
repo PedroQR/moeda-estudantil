@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../api'
 import { Emails, Tabela } from '../componentes/Listas'
-import { Faixa, Foto } from '../componentes/Ui'
+import { Cabecalho, Carregando, Exclusao, Faixa, Foto } from '../componentes/Ui'
 import { useSessao } from '../sessao'
-import { fotoSegura, quando } from '../util'
+import { fotoSegura, moedas, quando } from '../util'
 
 export default function PainelEmpresa() {
   const { setSessao } = useSessao()
@@ -50,51 +50,73 @@ export default function PainelEmpresa() {
     }
   }
 
-  if (!painel && !erro) return <p className="carregando">Carregando.</p>
+  if (!painel && !erro) return <Carregando />
 
   return (
     <>
       <Faixa ok={location.state?.mensagem} erro={erro} />
       {painel ? (
         <>
-          <h1>{painel.empresa.nome}</h1>
-          <p>{painel.empresa.email}</p>
-          <div className="acoes">
-            <Link className="botao" to="/empresa/vantagens/nova">Nova vantagem</Link>
-            <Link className="botao secundario" to="/empresa/editar">Editar cadastro</Link>
-          </div>
-          <h2>Vantagens</h2>
-          {painel.vantagens.length === 0 ? <p>Nenhuma vantagem cadastrada. Inclua descrição, foto e custo em moedas.</p> : null}
-          <div className="catalogo">
-            {painel.vantagens.map((vantagem) => (
-              <article className="prato" key={vantagem.id}>
-                <Foto url={fotoSegura(vantagem.fotoUrl)} alt="Foto da vantagem" />
-                <div>
-                  <h2>{vantagem.descricao}</h2>
-                  <div className="acoes">
-                    <Link className="botao secundario" to={`/empresa/vantagens/${vantagem.id}`}>Editar</Link>
-                    <button className="botao perigo" type="button" onClick={() => excluirVantagem(vantagem.id)}>Excluir</button>
-                  </div>
-                </div>
-                <p className="preco">{vantagem.custoEmMoedas} moedas</p>
-              </article>
-            ))}
-          </div>
-          <h2>Resgates para conferência</h2>
-          <Tabela
-            colunas={['Data', 'Aluno', 'Vantagem', 'Cupom']}
-            vazio="Nenhum resgate ainda."
-            linhas={painel.resgates.map((item) => (
-              <tr key={item.codigoCupom}>
-                <td>{quando(item.dataHora)}</td>
-                <td>{item.alunoNome}</td>
-                <td>{item.vantagemDescricao}</td>
-                <td className="cupom">{item.codigoCupom}</td>
-              </tr>
-            ))}
-          />
+          <Cabecalho
+            titulo={painel.empresa.nome}
+            acoes={(
+              <>
+                <Link className="botao" to="/empresa/vantagens/nova">Nova vantagem</Link>
+                <Link className="botao secundario" to="/empresa/editar">Editar cadastro</Link>
+              </>
+            )}
+          >
+            <p>{painel.empresa.email}</p>
+          </Cabecalho>
+          <section aria-labelledby="vantagens-titulo">
+            <div className="secao-topo">
+              <h2 id="vantagens-titulo">Vantagens</h2>
+            </div>
+            {painel.vantagens.length === 0 ? (
+              <p className="vazio-bloco">Nenhuma vantagem cadastrada. Inclua descrição, foto e custo em moedas em <Link to="/empresa/vantagens/nova">Nova vantagem</Link>.</p>
+            ) : (
+              <ul className="vitrine">
+                {painel.vantagens.map((vantagem) => (
+                  <li className="peca" key={vantagem.id}>
+                    <Foto url={fotoSegura(vantagem.fotoUrl)} alt="Foto da vantagem" />
+                    <div className="peca-corpo">
+                      <h3>{vantagem.descricao}</h3>
+                    </div>
+                    <p className="peca-preco"><span><strong>{moedas(vantagem.custoEmMoedas)}</strong> moedas</span></p>
+                    <div className="acoes">
+                      <Link className="botao secundario pequeno" to={`/empresa/vantagens/${vantagem.id}`}>Editar</Link>
+                      <button className="botao perigo pequeno" type="button" onClick={() => excluirVantagem(vantagem.id)}>Excluir</button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+          <section aria-labelledby="resgates-titulo">
+            <div className="secao-topo">
+              <h2 id="resgates-titulo">Resgates para conferência</h2>
+              <p className="legenda">Confira o código do cupom apresentado pelo aluno.</p>
+            </div>
+            <Tabela
+              colunas={['Data', 'Aluno', 'Vantagem', 'Cupom']}
+              vazio="Nenhum resgate ainda."
+              linhas={painel.resgates.map((item) => (
+                <tr key={item.codigoCupom}>
+                  <td className="data">{quando(item.dataHora)}</td>
+                  <td className="forte">{item.alunoNome}</td>
+                  <td>{item.vantagemDescricao}</td>
+                  <td><span className="cupom">{item.codigoCupom}</span></td>
+                </tr>
+              ))}
+            />
+          </section>
           <Emails lista={painel.emails} />
-          <button className="botao perigo solto" type="button" onClick={excluirCadastro}>Excluir meu cadastro</button>
+          <Exclusao
+            titulo="Excluir cadastro"
+            texto="Remove o cadastro da empresa e encerra o acesso. Não dá para desfazer."
+            rotulo="Excluir meu cadastro"
+            aoExcluir={excluirCadastro}
+          />
         </>
       ) : null}
     </>

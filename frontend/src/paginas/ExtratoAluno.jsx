@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { api } from '../api'
-import { Emails, Tabela } from '../componentes/Listas'
-import { Faixa } from '../componentes/Ui'
+import { Emails, Movimentos } from '../componentes/Listas'
+import { Cabecalho, Carregando, Faixa, Saldo } from '../componentes/Ui'
 import { useSessao } from '../sessao'
-import { quando } from '../util'
+import { moedas, movimentosAluno } from '../util'
 
 export default function ExtratoAluno() {
   const { setSaldo } = useSessao()
@@ -26,40 +26,23 @@ export default function ExtratoAluno() {
     return () => { ativo = false }
   }, [setSaldo])
 
-  if (!extrato && !erro) return <p className="carregando">Carregando.</p>
+  if (!extrato && !erro) return <Carregando />
   if (!extrato) return <Faixa erro={erro} />
+
+  const recebido = extrato.recebimentos.reduce((soma, item) => soma + item.valor, 0)
+  const resgatado = extrato.resgates.reduce((soma, item) => soma + item.valor, 0)
 
   return (
     <>
       <Faixa ok={location.state?.mensagem} erro={erro} />
-      <h1>Extrato</h1>
-      <p className="saldo"><span>{extrato.saldoMoedas}</span><small>moedas</small></p>
-      <h2>Moedas recebidas</h2>
-      <Tabela
-        colunas={['Data', 'Valor', 'Professor', 'Motivo']}
-        vazio="Nenhuma moeda recebida."
-        linhas={extrato.recebimentos.map((item) => (
-          <tr key={`${item.dataHora}-${item.motivo}`}>
-            <td>{quando(item.dataHora)}</td>
-            <td>{item.valor}</td>
-            <td>{item.professorNome}</td>
-            <td>{item.motivo}</td>
-          </tr>
-        ))}
-      />
-      <h2>Resgates</h2>
-      <Tabela
-        colunas={['Data', 'Valor', 'Vantagem', 'Empresa', 'Cupom']}
-        vazio="Nenhum resgate."
-        linhas={extrato.resgates.map((item) => (
-          <tr key={item.codigoCupom}>
-            <td>{quando(item.dataHora)}</td>
-            <td>{item.valor}</td>
-            <td>{item.vantagemDescricao}</td>
-            <td>{item.empresaNome}</td>
-            <td className="cupom">{item.codigoCupom}</td>
-          </tr>
-        ))}
+      <Cabecalho titulo="Extrato" />
+      <Saldo valor={extrato.saldoMoedas} compacto />
+      <Movimentos
+        titulo="Movimentos"
+        resumo={<><span className="entrada">+{moedas(recebido)}</span> recebidas · −{moedas(resgatado)} em {extrato.resgates.length} {extrato.resgates.length === 1 ? 'cupom' : 'cupons'}</>}
+        legenda="Azul: recebidas de professores · Preto: resgates"
+        vazio="Nenhuma moeda recebida e nenhum resgate."
+        lista={movimentosAluno(extrato)}
       />
       <Emails lista={extrato.emails} />
     </>

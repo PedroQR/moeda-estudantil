@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { api } from '../api'
-import { Campo, Faixa } from '../componentes/Ui'
+import { Cabecalho, Campo, Carregando, Faixa } from '../componentes/Ui'
 import { useSessao } from '../sessao'
 
 const VAZIO = { nome: '', email: '', senha: '', cpf: '', rg: '', endereco: '', curso: '', instituicaoId: '' }
@@ -67,38 +67,49 @@ export default function FormAluno({ editando = false }) {
     }
   }
 
-  if (!pronto && !erro) return <p className="carregando">Carregando.</p>
+  if (!pronto && !erro) return <Carregando />
 
   return (
     <div className="pagina-form">
       <Faixa erro={erro} />
-      <h1>{editando ? 'Editar meus dados' : 'Cadastrar aluno'}</h1>
-      <form onSubmit={enviar}>
-        <Campo id="nome" rotulo="Nome" valor={valores.nome} aoMudar={mudar('nome')} obrigatorio autoComplete="name" />
-        <Campo id="email" rotulo="E-mail" tipo="email" valor={valores.email} aoMudar={mudar('email')} obrigatorio autoComplete="email" />
-        <Campo
-          id="senha"
-          rotulo="Senha"
-          tipo="password"
-          valor={valores.senha}
-          aoMudar={mudar('senha')}
-          obrigatorio={!editando}
-          autoComplete="new-password"
-          placeholder={editando ? 'Deixe em branco para manter' : undefined}
-        />
-        <Campo id="cpf" rotulo="CPF" valor={valores.cpf} aoMudar={mudar('cpf')} obrigatorio />
-        <Campo id="rg" rotulo="RG" valor={valores.rg} aoMudar={mudar('rg')} obrigatorio />
-        <Campo id="endereco" rotulo="Endereço" valor={valores.endereco} aoMudar={mudar('endereco')} obrigatorio autoComplete="street-address" />
-        <Campo id="curso" rotulo="Curso" valor={valores.curso} aoMudar={mudar('curso')} obrigatorio />
-        <div className="campo">
-          <label htmlFor="instituicaoId">Instituição de ensino</label>
-          <select id="instituicaoId" value={valores.instituicaoId} required onChange={(event) => mudar('instituicaoId')(event.target.value)}>
-            <option value="">Selecione</option>
-            {instituicoes.map((item) => <option key={item.id} value={item.id}>{item.nome}</option>)}
-          </select>
-        </div>
+      <Cabecalho titulo={editando ? 'Editar meus dados' : 'Cadastrar aluno'}>
+        {editando ? null : <p>Depois do cadastro, entre com o e-mail e a senha para ver seu saldo.</p>}
+      </Cabecalho>
+      <form className="formulario" onSubmit={enviar}>
+        <fieldset>
+          <legend>Acesso</legend>
+          <Campo id="nome" rotulo="Nome" valor={valores.nome} aoMudar={mudar('nome')} obrigatorio autoComplete="name" largo />
+          <Campo id="email" rotulo="E-mail" tipo="email" valor={valores.email} aoMudar={mudar('email')} obrigatorio autoComplete="email" />
+          <Campo
+            id="senha"
+            rotulo="Senha"
+            tipo="password"
+            valor={valores.senha}
+            aoMudar={mudar('senha')}
+            obrigatorio={!editando}
+            autoComplete="new-password"
+            placeholder={editando ? 'Deixe em branco para manter' : undefined}
+          />
+        </fieldset>
+        <fieldset>
+          <legend>Documentos e endereço</legend>
+          <Campo id="cpf" rotulo="CPF" valor={valores.cpf} aoMudar={mudar('cpf')} obrigatorio />
+          <Campo id="rg" rotulo="RG" valor={valores.rg} aoMudar={mudar('rg')} obrigatorio />
+          <Campo id="endereco" rotulo="Endereço" valor={valores.endereco} aoMudar={mudar('endereco')} obrigatorio autoComplete="street-address" largo />
+        </fieldset>
+        <fieldset>
+          <legend>Vínculo acadêmico</legend>
+          <Campo id="curso" rotulo="Curso" valor={valores.curso} aoMudar={mudar('curso')} obrigatorio />
+          <div className="campo">
+            <label htmlFor="instituicaoId">Instituição de ensino</label>
+            <select id="instituicaoId" value={valores.instituicaoId} required onChange={(event) => mudar('instituicaoId')(event.target.value)}>
+              <option value="">Selecione</option>
+              {instituicoes.map((item) => <option key={item.id} value={item.id}>{item.nome}</option>)}
+            </select>
+          </div>
+        </fieldset>
         <div className="acoes">
-          <button className="botao" type="submit" disabled={enviando}>Salvar</button>
+          <button className="botao" type="submit" disabled={enviando}>{enviando ? 'Salvando…' : 'Salvar'}</button>
           <Link className="botao secundario" to={editando ? '/aluno' : '/'}>Cancelar</Link>
         </div>
       </form>

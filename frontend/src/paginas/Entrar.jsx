@@ -5,6 +5,11 @@ import { Campo, Faixa } from '../componentes/Ui'
 import { useSessao } from '../sessao'
 import { destino } from '../util'
 
+const DEMO = [
+  ['Ana Souza', 'ana.souza@pucminas.br', 'PUC Minas'],
+  ['Carlos Lima', 'carlos.lima@ufmg.br', 'UFMG'],
+]
+
 export default function Entrar() {
   const { sessao, setSessao } = useSessao()
   const navigate = useNavigate()
@@ -31,23 +36,47 @@ export default function Entrar() {
     }
   }
 
+  function usarDemo(conta) {
+    setEmail(conta)
+    setSenha('prof123')
+    setErro('')
+  }
+
   return (
-    <div className="pagina-form">
-      <Faixa ok={location.state?.mensagem} erro={erro} />
-      <h1>Entrar</h1>
-      <form onSubmit={enviar}>
-        <Campo id="email" rotulo="E-mail" tipo="email" valor={email} aoMudar={setEmail} obrigatorio autoComplete="username" />
-        <Campo id="senha" rotulo="Senha" tipo="password" valor={senha} aoMudar={setSenha} obrigatorio autoComplete="current-password" />
-        <div className="acoes">
-          <button className="botao" type="submit" disabled={enviando}>Entrar</button>
+    <div className="dupla">
+      <section className="dupla-principal">
+        <Faixa ok={location.state?.mensagem} erro={erro} />
+        <h1>Entrar</h1>
+        <form className="formulario estreito" onSubmit={enviar}>
+          <Campo id="email" rotulo="E-mail" tipo="email" valor={email} aoMudar={setEmail} obrigatorio autoComplete="username" largo />
+          <Campo id="senha" rotulo="Senha" tipo="password" valor={senha} aoMudar={setSenha} obrigatorio autoComplete="current-password" largo />
+          <div className="acoes">
+            <button className="botao" type="submit" disabled={enviando}>{enviando ? 'Entrando…' : 'Entrar'}</button>
+          </div>
+        </form>
+        <div className="sem-conta">
+          <p>Ainda não tem conta?</p>
+          <div className="acoes">
+            <Link className="botao secundario" to="/cadastro/aluno">Cadastrar aluno</Link>
+            <Link className="botao secundario" to="/cadastro/empresa">Cadastrar empresa</Link>
+          </div>
         </div>
-      </form>
-      <p>Ainda não tem conta?</p>
-      <div className="acoes">
-        <Link className="botao secundario" to="/cadastro/aluno">Cadastrar aluno</Link>
-        <Link className="botao secundario" to="/cadastro/empresa">Cadastrar empresa</Link>
-      </div>
-      <p className="prosa">Professores de demonstração, senha prof123: ana.souza@pucminas.br e carlos.lima@ufmg.br.</p>
+      </section>
+      <aside className="dupla-lado demo" aria-labelledby="demo-titulo">
+        <h2 id="demo-titulo">Professores de demonstração</h2>
+        <p>Senha <span className="cupom">prof123</span> para as duas contas. Escolha uma para preencher o formulário.</p>
+        <ul className="demo-lista">
+          {DEMO.map(([nome, conta, instituicao]) => (
+            <li key={conta}>
+              <button type="button" className="demo-conta" onClick={() => usarDemo(conta)}>
+                <strong>{nome}</strong>
+                <span>{conta}</span>
+                <span>{instituicao}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </aside>
     </div>
   )
 }

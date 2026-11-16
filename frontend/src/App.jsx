@@ -9,6 +9,7 @@ import FormAluno from './paginas/FormAluno'
 import FormEmpresa from './paginas/FormEmpresa'
 import FormVantagem from './paginas/FormVantagem'
 import Inicio from './paginas/Inicio'
+import NaoExiste from './paginas/NaoExiste'
 import PainelAluno from './paginas/PainelAluno'
 import PainelEmpresa from './paginas/PainelEmpresa'
 import PainelProfessor from './paginas/PainelProfessor'
@@ -33,7 +34,7 @@ export default function App() {
         <Route path="empresa/editar" element={<Exige papel="EMPRESA"><FormEmpresa editando /></Exige>} />
         <Route path="empresa/vantagens/nova" element={<Exige papel="EMPRESA"><FormVantagem /></Exige>} />
         <Route path="empresa/vantagens/:id" element={<Exige papel="EMPRESA"><FormVantagem /></Exige>} />
-        <Route path="*" element={<p>Essa página não existe.</p>} />
+        <Route path="*" element={<NaoExiste />} />
       </Route>
     </Routes>
   )
