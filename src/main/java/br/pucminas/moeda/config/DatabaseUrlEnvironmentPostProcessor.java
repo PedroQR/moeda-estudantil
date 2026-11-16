@@ -16,15 +16,33 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         String explicita = System.getenv("SPRING_DATASOURCE_URL");
-        if (explicita != null && !explicita.isBlank()) {
+        if (explicita != null && explicita.startsWith("jdbc:")) {
             return;
         }
         String bruto = primeiro(
-                environment.getProperty("DATABASE_URL"),
-                environment.getProperty("POSTGRES_URL"));
-        if (bruto == null || bruto.isBlank() || bruto.startsWith("jdbc:")) {
+                System.getenv("DATABASE_URL_UNPOOLED"),
+                System.getenv("POSTGRES_URL_NON_POOLING"),
+                System.getenv("DATABASE_URL"),
+                System.getenv("POSTGRES_URL"),
+                explicita);
+        if (bruto == null || bruto.isBlank()) {
             return;
         }
+        Map<String, Object> propriedades = new LinkedHashMap<>();
+        if (bruto.startsWith("jdbc:")) {
+            propriedades.put("spring.datasource.url", bruto);
+        } else {
+            aplicarUrlLibpq(bruto, propriedades);
+        }
+        propriedades.put("spring.datasource.driver-class-name", "org.postgresql.Driver");
+        propriedades.put("spring.datasource.hikari.maximum-pool-size", "2");
+        propriedades.put(
+                "spring.session.jdbc.schema",
+                "classpath:org/springframework/session/jdbc/schema-postgresql.sql");
+        environment.getPropertySources().addFirst(new MapPropertySource("databaseUrl", propriedades));
+    }
+
+    private static void aplicarUrlLibpq(String bruto, Map<String, Object> propriedades) {
         URI uri = URI.create(bruto.replaceFirst("^postgres://", "postgresql://"));
         String usuario = "";
         String senha = "";
@@ -46,13 +64,9 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
         if (uri.getHost() != null && uri.getHost().contains("-pooler") && !jdbc.contains("prepareThreshold=")) {
             jdbc = jdbc + "&prepareThreshold=0";
         }
-        Map<String, Object> propriedades = new LinkedHashMap<>();
         propriedades.put("spring.datasource.url", jdbc);
         propriedades.put("spring.datasource.username", usuario);
         propriedades.put("spring.datasource.password", senha);
-        propriedades.put("spring.datasource.driver-class-name", "org.postgresql.Driver");
-        propriedades.put("spring.datasource.hikari.maximum-pool-size", "2");
-        environment.getPropertySources().addFirst(new MapPropertySource("databaseUrl", propriedades));
     }
 
     private static String primeiro(String... valores) {
