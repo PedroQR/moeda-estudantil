@@ -42,7 +42,7 @@ public class ApiErros {
     @ExceptionHandler({MaxUploadSizeExceededException.class, MultipartException.class})
     public ResponseEntity<Contratos.Mensagem> arquivo(Exception ex) {
         if (ex instanceof MaxUploadSizeExceededException || causaDeTamanho(ex)) {
-            return ResponseEntity.badRequest().body(Contratos.Mensagem.de("A foto deve ter no máximo 5 MB."));
+            return ResponseEntity.badRequest().body(Contratos.Mensagem.de("A foto deve ter no máximo 4 MB."));
         }
         return ResponseEntity.badRequest().body(Contratos.Mensagem.de("Não foi possível receber a foto."));
     }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class SessaoUsuario implements Serializable {
 
     public static final String CHAVE = "usuarioLogado";
+    private static final long serialVersionUID = 1L;
 
     public enum Papel {
         ALUNO, PROFESSOR, EMPRESA

@@ -16,10 +16,14 @@ spring:
       mail.smtp.timeout: 5000
       mail.smtp.writetimeout: 5000
   datasource:
-    url: jdbc:postgresql://localhost:5432/moeda_estudantil
-    username: moeda
-    password: moeda123
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/moeda_estudantil}
+    username: ${SPRING_DATASOURCE_USERNAME:moeda}
+    password: ${SPRING_DATASOURCE_PASSWORD:moeda123}
     driver-class-name: org.postgresql.Driver
+  session:
+    timeout: 12h
+    jdbc:
+      initialize-schema: always
   jpa:
     hibernate:
       ddl-auto: update
@@ -30,14 +34,18 @@ spring:
     open-in-view: false
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 6MB
+      max-file-size: 4MB
+      max-request-size: 4MB
 
 server:
-  port: 8080
+  port: ${PORT:8080}
+  forward-headers-strategy: framework
   servlet:
     session:
       tracking-modes: cookie
+      cookie:
+        http-only: true
+        same-site: lax
 
 app:
   mail:

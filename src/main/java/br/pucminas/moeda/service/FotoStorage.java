@@ -1,13 +1,12 @@
 package br.pucminas.moeda.service;
 
+import br.pucminas.moeda.domain.ArquivoUpload;
+import br.pucminas.moeda.repository.ArquivoUploadRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
@@ -17,6 +16,13 @@ public class FotoStorage {
 
     private static final Set<String> EXTENSOES = Set.of(".png", ".jpg", ".jpeg", ".webp", ".gif");
 
+    private final ArquivoUploadRepository repositorio;
+
+    public FotoStorage(ArquivoUploadRepository repositorio) {
+        this.repositorio = repositorio;
+    }
+
+    @Transactional
     public String salvar(MultipartFile foto) {
         if (foto == null || foto.isEmpty()) {
             return null;
@@ -25,14 +31,16 @@ public class FotoStorage {
         if (!EXTENSOES.contains(extensao)) {
             throw new IllegalArgumentException("Envie uma imagem PNG, JPEG, WEBP ou GIF");
         }
+        if (foto.getSize() > 4L * 1024 * 1024) {
+            throw new IllegalArgumentException("A foto deve ter no máximo 4 MB.");
+        }
         try {
-            Path diretorio = Path.of("data", "uploads").toAbsolutePath();
-            Files.createDirectories(diretorio);
             String nome = UUID.randomUUID() + extensao;
-            Path destino = diretorio.resolve(nome);
-            try (InputStream entrada = foto.getInputStream()) {
-                Files.copy(entrada, destino, StandardCopyOption.REPLACE_EXISTING);
-            }
+            ArquivoUpload arquivo = new ArquivoUpload();
+            arquivo.setNome(nome);
+            arquivo.setContentType(tipoDe(extensao));
+            arquivo.setConteudo(foto.getBytes());
+            repositorio.save(arquivo);
             return "/uploads/" + nome;
         } catch (IOException ex) {
             throw new IllegalArgumentException("Não foi possível salvar a foto");
@@ -56,5 +64,14 @@ public class FotoStorage {
             return "";
         }
         return original.substring(original.lastIndexOf('.')).toLowerCase(Locale.ROOT);
+    }
+
+    private String tipoDe(String extensao) {
+        return switch (extensao) {
+            case ".png" -> "image/png";
+            case ".webp" -> "image/webp";
+            case ".gif" -> "image/gif";
+            default -> "image/jpeg";
+        };
     }
 }
