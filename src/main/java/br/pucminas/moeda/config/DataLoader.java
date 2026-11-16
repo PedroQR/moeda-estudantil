@@ -6,9 +6,11 @@ import br.pucminas.moeda.repository.InstituicaoEnsinoRepository;
 import br.pucminas.moeda.repository.ProfessorRepository;
 import br.pucminas.moeda.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(100)
 public class DataLoader implements CommandLineRunner {
 
     public static final String PROFESSOR_EMAIL = "ana.souza@pucminas.br";

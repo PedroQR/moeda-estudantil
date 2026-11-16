@@ -6,8 +6,10 @@ import { useSessao } from '../sessao'
 import { destino } from '../util'
 
 const DEMO = [
-  ['Ana Souza', 'ana.souza@pucminas.br', 'PUC Minas'],
-  ['Carlos Lima', 'carlos.lima@ufmg.br', 'UFMG'],
+  ['Marina Alves', 'aluno@pucminas.br', 'aluno123', 'Aluna · 500 moedas'],
+  ['Cantina do Campus', 'empresa@pucminas.br', 'empresa123', 'Empresa · café, cinema e livro'],
+  ['Ana Souza', 'ana.souza@pucminas.br', 'prof123', 'Professora · PUC Minas'],
+  ['Carlos Lima', 'carlos.lima@ufmg.br', 'prof123', 'Professor · UFMG'],
 ]
 
 export default function Entrar() {
@@ -36,9 +38,9 @@ export default function Entrar() {
     }
   }
 
-  function usarDemo(conta) {
+  function usarDemo(conta, senha) {
     setEmail(conta)
-    setSenha('prof123')
+    setSenha(senha)
     setErro('')
   }
 
@@ -63,15 +65,15 @@ export default function Entrar() {
         </div>
       </section>
       <aside className="dupla-lado demo" aria-labelledby="demo-titulo">
-        <h2 id="demo-titulo">Professores de demonstração</h2>
-        <p>Senha <span className="cupom">prof123</span> para as duas contas. Escolha uma para preencher o formulário.</p>
+        <h2 id="demo-titulo">Contas de demonstração</h2>
+        <p>Escolha uma conta para preencher o formulário. A senha aparece em cada cartão.</p>
         <ul className="demo-lista">
-          {DEMO.map(([nome, conta, instituicao]) => (
+          {DEMO.map(([nome, conta, senha, detalhe]) => (
             <li key={conta}>
-              <button type="button" className="demo-conta" onClick={() => usarDemo(conta)}>
+              <button type="button" className="demo-conta" onClick={() => usarDemo(conta, senha)}>
                 <strong>{nome}</strong>
                 <span>{conta}</span>
-                <span>{instituicao}</span>
+                <span>Senha {senha} · {detalhe}</span>
               </button>
             </li>
           ))}
