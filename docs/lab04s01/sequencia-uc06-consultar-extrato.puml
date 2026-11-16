@@ -1,0 +1,54 @@
+@startuml sequencia-uc06-consultar-extrato
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 13
+title UC06 — Consultar extrato
+
+actor "Professor ou aluno" as Ator
+participant "Tela React" as Tela
+participant "SessaoGuard" as Guard
+participant "ProfessorController" as PC
+participant "AlunoController" as AC
+participant "ProfessorService" as PS
+participant "AlunoService" as AS
+participant "ResgateService" as RS
+participant "TransacaoEnvioRepository" as ER
+participant "TransacaoResgateRepository" as RR
+
+Ator -> Tela : abre o extrato
+
+alt professor
+  Tela -> PC : GET /api/professor/extrato
+  PC -> Guard : exigir(sessão, PROFESSOR)
+  Guard --> PC : SessaoUsuario
+  note right of PC
+    O controller credita semestres
+    pendentes antes de listar (UC10).
+  end note
+  PC -> PS : buscar(professorId)
+  PS --> PC : saldo atual
+  PC -> PS : extrato(professorId)
+  PS -> ER : findByProfessorId
+  ER --> PS : envios (data, aluno, valor, motivo)
+  PS --> PC : List<TransacaoEnvio>
+  PC --> Tela : saldo e transações de envio
+  Tela --> Ator : extrato do professor
+else aluno
+  Tela -> AC : GET /api/aluno/extrato
+  AC -> Guard : exigir(sessão, ALUNO)
+  Guard --> AC : SessaoUsuario
+  AC -> AS : buscarPorId(alunoId)
+  AS --> AC : saldo atual
+  AC -> AS : recebimentos(alunoId)
+  AS -> ER : findByAlunoId
+  ER --> AS : recebimentos
+  AC -> RS : extratoDoAluno(alunoId)
+  RS -> RR : findByAlunoId
+  RR --> RS : resgates
+  RS --> AC : List<TransacaoResgate>
+  AC --> Tela : saldo, recebimentos e trocas
+  Tela --> Ator : extrato do aluno
+end
+
+@enduml

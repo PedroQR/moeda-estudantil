@@ -1,0 +1,50 @@
+@startuml sequencia-uc08-notificar-recebimento
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 13
+title UC08 — Notificar recebimento de moedas
+
+participant "ProfessorService" as PS
+participant "EmailService" as ES
+participant "NotificacaoEmail" as N
+participant "NotificacaoEmailRepository" as R
+participant "EmailDispatcher" as D
+participant "EmailEntregaService" as EE
+participant "Servidor SMTP" as SMTP
+actor "Aluno" as Aluno
+
+PS -> ES : enviar(email do aluno,\n"você recebeu moedas", corpo)
+note right of PS
+  Corpo: valor, nome do professor,
+  instituição e motivo.
+  Ocorre na mesma transação do envio.
+end note
+ES -> N : registrar()
+ES -> R : save(notificacao)
+R --> ES : NotificacaoEmail com status PENDENTE
+ES -> ES : publica EmailRegistrado(id)
+note over D
+  O SMTP só é chamado
+  depois do commit das moedas.
+  Transação desfeita não envia e-mail.
+end note
+D -> EE : tentarEnviar(id) após o commit
+EE -> R : findByIdForUpdate(id)
+R --> EE : NotificacaoEmail
+EE -> N : iniciarTentativa()
+EE -> SMTP : envia ao aluno
+alt SMTP aceita
+  SMTP --> EE : aceite
+  EE -> N : marcarEnviado()
+  EE -> R : save
+  SMTP --> Aluno : valor, professor e motivo
+else falha de SMTP
+  EE -> N : marcarFalha()
+  note right of EE
+    O saldo e a transação permanecem.
+    Há até 5 tentativas, com o mesmo conteúdo.
+  end note
+end
+
+@enduml

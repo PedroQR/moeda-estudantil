@@ -1,0 +1,65 @@
+@startuml sequencia-uc05-enviar-moedas
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 13
+title UC05 — Enviar moedas ao aluno
+
+actor "Professor" as Ator
+participant "Tela React\n/professor/enviar" as Tela
+participant "SessaoGuard" as Guard
+participant "ProfessorController" as C
+participant "ProfessorService" as S
+participant "ProfessorRepository" as PR
+participant "AlunoRepository" as AR
+participant "Professor" as P
+participant "Aluno" as A
+participant "TransacaoEnvioRepository" as TR
+
+Ator -> Tela : aluno, valor e motivo
+Tela -> C : POST /api/professor/envios
+C -> Guard : exigir(sessão, PROFESSOR)
+
+alt sem sessão de professor
+  Guard --> Tela : acesso negado
+else professor autenticado
+  Guard --> C : SessaoUsuario
+  note right of C
+    Antes do envio, o controller credita
+    semestres pendentes (UC10).
+  end note
+  alt aluno, valor ou motivo ausente
+    C --> Tela : 400 "Informe o aluno, um valor positivo e o motivo."
+    Tela --> Ator : envio recusado
+  else dados informados
+    C -> S : enviarMoedas(professorId, alunoId, valor, motivo)
+    S -> PR : findByIdForUpdate(professorId)
+    PR --> S : Professor
+    S -> AR : findByIdForUpdate(alunoId)
+    AR --> S : Aluno
+    S -> P : enviarMoedas(aluno, valor, motivo)
+    alt motivo vazio, valor inválido ou saldo insuficiente
+      P --> S : rejeita a operação
+      S --> C : nenhuma moeda muda de conta
+      C --> Tela : envio recusado
+      Tela --> Ator : saldo permanece igual
+    else saldo suficiente e motivo preenchido
+      P -> P : debita o próprio saldo
+      P -> A : creditar(valor)
+      P --> S : TransacaoEnvio
+      S -> PR : save(professor)
+      S -> AR : save(aluno)
+      S -> TR : save(envio)
+      TR --> S : TransacaoEnvio
+      ref over S
+        UC08 — Notificar recebimento de moedas
+        sequencia-uc08-notificar-recebimento
+      end ref
+      S --> C : TransacaoEnvio
+      C --> Tela : "Moedas enviadas." e saldo atual
+      Tela --> Ator : extrato dos dois passa a listar o envio
+    end
+  end
+end
+
+@enduml

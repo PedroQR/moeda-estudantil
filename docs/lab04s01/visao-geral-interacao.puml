@@ -1,0 +1,56 @@
+@startuml visao-geral-interacao
+skinparam shadowing false
+skinparam defaultFontSize 14
+skinparam activity {
+  BackgroundColor<<interaction>> #D6EAF8
+  BorderColor<<interaction>> #1A5276
+  DiamondBackgroundColor #FDEBD0
+  FontSize 14
+}
+title Diagrama de Visão Geral de Interação — Sistema de Moeda Estudantil
+
+start
+if (O que o visitante faz?) then (cadastrar)
+  if (Qual cadastro?) then (aluno)
+    :UC02 Cadastrar aluno\nref sequencia-uc02-cadastrar-aluno; <<interaction>>
+  else (empresa parceira)
+    :UC03 Cadastrar empresa parceira\nref sequencia-uc03-cadastrar-empresa; <<interaction>>
+  endif
+else (entrar)
+endif
+
+:UC01 Realizar login\nref sequencia-uc01-login; <<interaction>>
+
+if (Papel da sessão?) then (professor)
+  :UC10 Creditar moedas semestrais\nref sequencia-uc10-credito-semestral; <<interaction>>
+  if (Ação do professor?) then (enviar moedas)
+    :UC05 Enviar moedas ao aluno\nref sequencia-uc05-enviar-moedas; <<interaction>>
+    :UC08 Notificar recebimento\nref sequencia-uc08-notificar-recebimento; <<interaction>>
+  else (consultar extrato)
+    :UC06 Consultar extrato\nref sequencia-uc06-consultar-extrato; <<interaction>>
+  endif
+elseif (Papel da sessão?) then (aluno)
+  if (Ação do aluno?) then (consultar extrato)
+    :UC06 Consultar extrato\nref sequencia-uc06-consultar-extrato; <<interaction>>
+  else (resgatar vantagem)
+    :UC07 Resgatar vantagem\nref sequencia-uc07-resgatar-vantagem; <<interaction>>
+    :UC09 Enviar cupom de resgate\nref sequencia-uc09-enviar-cupom; <<interaction>>
+  endif
+else (empresa)
+  :UC04 Cadastrar vantagens\nref sequencia-uc04-cadastrar-vantagem; <<interaction>>
+endif
+stop
+
+legend right
+  Cada ação <<interaction>> referencia
+  o diagrama de sequência indicado.
+  Credencial inválida, saldo insuficiente,
+  motivo vazio e semestre já creditado
+  aparecem nesses diagramas.
+  UC05 inclui UC08.
+  UC07 inclui UC09 para aluno e empresa.
+  UC10 também dispara na subida
+  e à meia-noite, além do acesso do professor.
+endlegend
+
+@enduml

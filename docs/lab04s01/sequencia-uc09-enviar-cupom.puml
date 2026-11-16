@@ -1,0 +1,48 @@
+@startuml sequencia-uc09-enviar-cupom
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 13
+title UC09 — Enviar cupom de resgate
+
+participant "ResgateService" as RS
+participant "EmailService" as ES
+participant "NotificacaoEmail" as N
+participant "NotificacaoEmailRepository" as R
+participant "EmailDispatcher" as D
+participant "EmailEntregaService" as EE
+participant "Servidor SMTP" as SMTP
+actor "Aluno" as Aluno
+actor "Empresa parceira" as Empresa
+
+RS -> ES : enviar(aluno, "cupom de resgate", corpo)
+note right of RS
+  Corpo do aluno: vantagem, empresa,
+  custo e código do cupom.
+end note
+ES -> N : registrar()
+ES -> R : save
+RS -> ES : enviar(empresa, "cupom para conferência", corpo)
+note right of RS
+  Corpo da empresa: aluno, vantagem
+  e o mesmo código do cupom.
+end note
+ES -> N : registrar()
+ES -> R : save
+note over D
+  Cada notificação segue o ciclo do UC08:
+  persistida na transação do resgate
+  e entregue somente após o commit.
+end note
+D -> EE : tentarEnviar de cada id após o commit
+EE -> SMTP : envia o cupom ao aluno
+SMTP --> Aluno : código para a troca presencial
+EE -> SMTP : envia o mesmo código à empresa
+SMTP --> Empresa : código para conferir a troca
+note right of EE
+  Nova tentativa não é outro fluxo:
+  se o SMTP falhar, a fila repete até 5 vezes
+  sem gerar outro código e sem devolver moedas.
+end note
+
+@enduml

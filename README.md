@@ -81,6 +81,10 @@ Ver [docs/sprint1/](docs/sprint1/) · PDF: [Lab03S01_Moeda_Estudantil.pdf](docs/
 - Crédito semestral, envio de moedas, extratos, vantagens e resgate com cupom
 - Slides: [docs/sprint3/slides.pptx](docs/sprint3/slides.pptx) · [PDF](docs/sprint3/slides.pdf)
 
+### Sprint 1 (Lab04S01) — Sequência e visão geral de interação
+
+Ver [docs/lab04s01/](docs/lab04s01/) · PDF: [Lab04S01_Moeda_Estudantil.pdf](docs/lab04s01/Lab04S01_Moeda_Estudantil.pdf)
+
 ## Rotas
 
 O navegador usa caminhos comuns (`http://localhost:5173/aluno`). Os dados passam por `/api`.
@@ -106,6 +110,7 @@ frontend/                    # Vite, React e React Router
 docs/sprint1/    # UML da Sprint 1
 docs/sprint2/    # ER
 docs/sprint3/    # Slides e documentação
+docs/lab04s01/   # Sequências e visão geral de interação
 ```
 
 Fotos das vantagens ficam em `data/uploads/` (não versionado).

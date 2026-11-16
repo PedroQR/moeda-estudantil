@@ -1,0 +1,61 @@
+@startuml sequencia-uc07-resgatar-vantagem
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 13
+title UC07 — Resgatar vantagem
+
+actor "Aluno" as Ator
+participant "Tela React\n/aluno/vantagens" as Tela
+participant "SessaoGuard" as Guard
+participant "AlunoController" as C
+participant "ResgateService" as S
+participant "AlunoRepository" as AR
+participant "VantagemRepository" as VR
+participant "Aluno" as A
+participant "TransacaoResgateRepository" as RR
+
+Ator -> Tela : escolhe uma vantagem
+Tela -> C : POST /api/aluno/vantagens/{id}/resgatar
+C -> Guard : exigir(sessão, ALUNO)
+
+alt sem sessão de aluno
+  Guard --> Tela : acesso negado
+else aluno autenticado
+  Guard --> C : SessaoUsuario
+  C -> S : resgatar(alunoId, vantagemId)
+  S -> AR : findByIdForUpdate(alunoId)
+  AR --> S : Aluno
+  S -> VR : findByIdWithEmpresa(vantagemId)
+  VR --> S : Vantagem
+  S -> A : debitar(custoEmMoedas)
+  alt saldo insuficiente
+    A --> S : IllegalStateException
+    S --> C : resgate recusado
+    C --> Tela : nenhuma moeda é debitada
+    Tela --> Ator : saldo permanece igual
+  else saldo suficiente
+    A --> S : saldo debitado
+    S -> RR : existsByCodigoCupom até obter código livre
+    note right of S
+      Código de 8 caracteres, único.
+      Aluno e empresa recebem o mesmo valor.
+    end note
+    S -> AR : save(aluno)
+    S -> RR : save(TransacaoResgate)
+    RR --> S : TransacaoResgate
+    ref over S
+      UC09 — Enviar cupom ao aluno
+      sequencia-uc09-enviar-cupom
+    end ref
+    ref over S
+      UC09 — Enviar cupom à empresa
+      mesmo código
+    end ref
+    S --> C : TransacaoResgate
+    C --> Tela : código do cupom
+    Tela --> Ator : resgate concluído
+  end
+end
+
+@enduml

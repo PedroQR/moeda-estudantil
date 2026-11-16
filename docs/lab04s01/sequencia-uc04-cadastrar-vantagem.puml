@@ -1,0 +1,49 @@
+@startuml sequencia-uc04-cadastrar-vantagem
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 13
+title UC04 — Cadastrar vantagens
+
+actor "Empresa parceira" as Ator
+participant "Tela React\n/empresa/vantagens/nova" as Tela
+participant "SessaoGuard" as Guard
+participant "EmpresaController" as C
+participant "VantagemService" as S
+participant "EmpresaParceiraRepository" as ER
+participant "FotoStorage" as Foto
+participant "EmpresaParceira" as E
+participant "VantagemRepository" as VR
+
+Ator -> Tela : descrição, custo em moedas e foto
+Tela -> C : POST /api/empresa/vantagens
+C -> Guard : exigir(sessão, EMPRESA)
+
+alt sem sessão de empresa
+  Guard --> C : acesso negado
+  C --> Tela : redireciona para o login
+else empresa autenticada
+  Guard --> C : SessaoUsuario
+  C -> S : salvar(empresaId, descricao, custo, foto)
+  S -> ER : findById(empresaId)
+  ER --> S : EmpresaParceira
+  S -> Foto : salvar(foto)
+  Foto --> S : fotoUrl
+  S -> E : cadastrarVantagem(vantagem)
+  alt descrição, foto ou custo ausente
+    E --> S : IllegalArgumentException
+    S --> C : cadastro recusado
+    C --> Tela : informa o erro
+    Tela --> Ator : a vantagem não fica disponível
+  else descrição, foto e custo positivos
+    E -> E : associa a vantagem à empresa
+    E --> S : Vantagem
+    S -> VR : save(vantagem)
+    VR --> S : Vantagem
+    S --> C : Vantagem
+    C --> Tela : "Vantagem cadastrada."
+    Tela --> Ator : alunos já podem resgatá-la
+  end
+end
+
+@enduml

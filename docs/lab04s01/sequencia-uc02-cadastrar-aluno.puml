@@ -1,0 +1,49 @@
+@startuml sequencia-uc02-cadastrar-aluno
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 13
+title UC02 — Cadastrar aluno
+
+actor "Aluno" as Ator
+participant "Tela React\n/cadastro/aluno" as Tela
+participant "AlunoController" as C
+participant "AlunoService" as S
+participant "InstituicaoEnsinoRepository" as Inst
+participant "AuthService" as Auth
+participant "AlunoRepository" as R
+participant "Aluno" as A
+
+Ator -> Tela : nome, e-mail, senha, CPF, RG,\nendereço, curso e instituição
+Tela -> C : POST /api/alunos
+C -> S : salvar(aluno, instituicaoId)
+S -> Inst : findById(instituicaoId)
+
+alt instituição não cadastrada ou dados obrigatórios ausentes
+  S --> C : IllegalArgumentException
+  C --> Tela : cadastro recusado
+  Tela --> Ator : informa o erro
+else instituição pré-cadastrada
+  Inst --> S : InstituicaoEnsino
+  S -> Auth : validarEmailDisponivel(email)
+  S -> R : existsByCpf(cpf)
+  alt e-mail ou CPF já cadastrado
+    S --> C : IllegalArgumentException
+    C --> Tela : cadastro recusado
+    Tela --> Ator : informa o erro
+  else identificadores livres
+    S -> A : setSaldoMoedas(0)
+    S -> A : setInstituicao(instituicao)
+    S -> R : save(aluno)
+    R --> S : Aluno
+    S --> C : Aluno
+    C --> Tela : "Cadastro realizado. Entre com seu e-mail e senha."
+    Tela --> Ator : pode entrar com o e-mail e a senha
+    note right of A
+      O cadastro não abre sessão.
+      O saldo inicial é zero.
+    end note
+  end
+end
+
+@enduml

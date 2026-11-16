@@ -1,0 +1,51 @@
+@startuml sequencia-uc10-credito-semestral
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 13
+title UC10 — Creditar moedas semestrais
+
+participant "CreditoSemestralJob" as Job
+participant "ProfessorController" as C
+participant "ProfessorRepository" as R
+participant "ProfessorService" as S
+participant "PeriodoLetivo" as Per
+participant "Professor" as P
+
+alt subida da aplicação ou meia-noite (America/Sao_Paulo)
+  Job -> R : findAllIds()
+  loop cada professor
+    Job -> S : creditarSemestreSePendente(id)
+  end
+else painel, envio ou extrato do professor
+  C -> S : creditarSemestreSePendente(professorId)
+end
+
+S -> R : findByIdForUpdate(id)
+R --> S : Professor
+S -> Per : atual()
+Per --> S : período AAAA-1 ou AAAA-2
+S -> Per : semestres pendentes desde o último crédito
+Per --> S : quantidade de semestres
+
+alt nenhum semestre pendente
+  S --> Job : 0, quando o job disparou
+  S --> C : 0, quando o professor acessou
+  note right of S
+    Só o disparo ativo recebe o retorno.
+    O período já creditado não é repetido
+    e o saldo existente permanece.
+  end note
+else há semestres pendentes
+  S -> P : creditarSemestre(1000 × semestres)
+  note right of P
+    As moedas não usadas continuam na conta
+    e recebem as 1.000 novas de cada semestre.
+  end note
+  S -> P : setUltimoPeriodoCreditado(período atual)
+  S -> R : save(professor)
+  S --> Job : quantidade, quando o job disparou
+  S --> C : quantidade, quando o professor acessou
+end
+
+@enduml

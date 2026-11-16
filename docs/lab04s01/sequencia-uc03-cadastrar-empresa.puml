@@ -1,0 +1,43 @@
+@startuml sequencia-uc03-cadastrar-empresa
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 13
+title UC03 — Cadastrar empresa parceira
+
+actor "Empresa parceira" as Ator
+participant "Tela React\n/cadastro/empresa" as Tela
+participant "EmpresaController" as C
+participant "EmpresaParceiraService" as S
+participant "AuthService" as Auth
+participant "EmpresaParceiraRepository" as R
+
+Ator -> Tela : nome, e-mail, senha e CNPJ
+Tela -> C : POST /api/empresas
+C -> S : salvar(empresa)
+
+alt nome, e-mail ou senha ausentes
+  S --> C : IllegalArgumentException
+  C --> Tela : cadastro recusado
+  Tela --> Ator : informa o erro
+else dados de acesso válidos
+  S -> Auth : validarEmailDisponivel(email)
+  alt e-mail já cadastrado
+    Auth --> S : IllegalArgumentException
+    S --> C : cadastro recusado
+    C --> Tela : informa o erro
+    Tela --> Ator : permanece no formulário
+  else e-mail livre
+    S -> R : save(empresa)
+    R --> S : EmpresaParceira
+    S --> C : EmpresaParceira
+    C --> Tela : "Cadastro realizado. Entre para cadastrar as vantagens."
+    Tela --> Ator : pode entrar e cadastrar vantagens
+    note right of S
+      O cadastro não abre sessão.
+      A empresa passa a oferecer vantagens depois do login.
+    end note
+  end
+end
+
+@enduml

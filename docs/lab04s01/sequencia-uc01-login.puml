@@ -1,0 +1,48 @@
+@startuml sequencia-uc01-login
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 13
+title UC01 — Realizar login
+
+actor "Aluno, professor\nou empresa" as Ator
+participant "Tela React\n/entrar" as Tela
+participant "SessaoController" as C
+participant "AuthService" as S
+participant "UsuarioRepository" as R
+participant "Usuario" as U
+participant "HttpSession" as H
+
+Ator -> Tela : informa e-mail e senha
+Tela -> C : POST /api/sessao
+C -> S : autenticar(email, senha)
+S -> R : findByEmail(email normalizado)
+
+alt e-mail inexistente
+  R --> S : vazio
+  S --> C : IllegalArgumentException\n"E-mail ou senha inválidos"
+  C --> Tela : acesso negado, sem sessão
+  Tela --> Ator : permanece na tela de entrada
+else e-mail cadastrado
+  R --> S : Usuario
+  S -> U : autenticar(senha)
+  alt senha incorreta
+    U --> S : falso
+    S --> C : IllegalArgumentException\n"E-mail ou senha inválidos"
+    C --> Tela : acesso negado, sem sessão
+    Tela --> Ator : permanece na tela de entrada
+  else senha confere
+    U --> S : verdadeiro
+    S --> C : SessaoUsuario\n(id, nome, e-mail, papel)
+    note right of S
+      O papel é ALUNO, PROFESSOR
+      ou EMPRESA, conforme o subtipo.
+    end note
+    C -> H : invalida sessão anterior, se houver
+    C -> H : setAttribute(SessaoUsuario)
+    C --> Tela : sessão do perfil
+    Tela --> Ator : abre somente as ações daquele papel
+  end
+end
+
+@enduml
