@@ -4,6 +4,7 @@ import br.pucminas.moeda.domain.Aluno;
 import br.pucminas.moeda.domain.ArquivoUpload;
 import br.pucminas.moeda.domain.EmpresaParceira;
 import br.pucminas.moeda.domain.InstituicaoEnsino;
+import br.pucminas.moeda.domain.Professor;
 import br.pucminas.moeda.domain.Usuario;
 import br.pucminas.moeda.domain.Vantagem;
 import br.pucminas.moeda.repository.AlunoRepository;
