@@ -2,6 +2,7 @@ package br.pucminas.moeda.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 
@@ -11,7 +12,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProcessor {
+public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
+
+    @Override
+    public int getOrder() {
+        return Ordered.LOWEST_PRECEDENCE;
+    }
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
@@ -40,6 +46,9 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
                 "spring.session.jdbc.schema",
                 "classpath:org/springframework/session/jdbc/schema-postgresql.sql");
         environment.getPropertySources().addFirst(new MapPropertySource("databaseUrl", propriedades));
+        Object url = propriedades.get("spring.datasource.url");
+        String host = url == null ? "?" : String.valueOf(url).replaceFirst("^jdbc:postgresql://", "").split("/")[0];
+        System.err.println("Banco configurado em " + host);
     }
 
     private static void aplicarUrlLibpq(String bruto, Map<String, Object> propriedades) {
