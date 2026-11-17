@@ -129,3 +129,4 @@ Para repetir a suíte em um **banco PostgreSQL descartável**, configure `TEST_D
 Daniel Verissimo
 Pedro Henrique Carvalho Pereira
 Pedro Soares
+https://moeda-estudantil-hazel.vercel.app/
